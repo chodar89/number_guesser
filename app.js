@@ -5,7 +5,7 @@ let min = 1,
   guessesLeft = 3;
 
 // UI Element
-const game = document.querySelector("game"),
+const game = document.querySelector("#game"),
   minNum = document.querySelector(".min-num"),
   maxNum = document.querySelector(".max-num"),
   guessBtn = document.querySelector("#guess-btn"),
@@ -16,6 +16,13 @@ const game = document.querySelector("game"),
 minNum.textContent = min;
 maxNum.textContent = max;
 
+// Play again event listener
+game.addEventListener("mousedown", function(e) {
+  if (e.target.className === "play-again") {
+    window.location.reload();
+  }
+});
+
 // Liten for guess
 
 guessBtn.addEventListener("click", function() {
@@ -24,6 +31,7 @@ guessBtn.addEventListener("click", function() {
   // Validate
   if (isNaN(guess) || guess < min || guess > max) {
     setMessage(`Please enter a number between ${min} and ${max}`, "red");
+    return;
   }
 
   // Check if won
@@ -35,7 +43,7 @@ guessBtn.addEventListener("click", function() {
     // Wrong number
     guessesLeft -= 1;
 
-    if (guessesLeft === 0) {
+    if (guessesLeft <= 0) {
       // Game lost
 
       gameOver(false, `Game Over, you lost. Correct number was ${winningNum}`);
@@ -70,6 +78,10 @@ function gameOver(won, msg) {
 
   // Set message
   setMessage(msg);
+
+  // Play again?
+  guessBtn.value = "Play Again";
+  guessBtn.className += "play-again";
 }
 
 // Set message
